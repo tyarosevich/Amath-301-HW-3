@@ -28,3 +28,34 @@ save A1.dat A1 -ASCII
 % note I dunno why it is written thsi way but the f(x_n) at the end is
 % actually f(x_last term). Also the wikipedia article includes excellent
 % python code at : https://en.wikipedia.org/wiki/Simpson%27s_rule#Composite_Simpson.27s_rule
+
+r = transpose(.308:.017:.478);
+T = transpose([640 794 885 943 1034 1064 1114 1152 1204 1222 1239]);
+
+T_r_num = (r.*T) * 0.7051;
+s_num = T_r_num(1) + T_r_num(end);
+h = .017;
+for i = 2:2:10
+    s_num = s_num + 4*(T_r_num(i));
+end
+for i = 3:2:9
+    s_num = s_num + 2*(T_r_num(i));
+end
+numerator = s_num * (h/3);
+
+T_r_den = r*0.7051;
+s_den = T_r_den(1) + T_r_den(end);
+for i = 1:2:9
+    s_den = s_den + 4*(T_r_den(i));
+end
+for i = 2:2:8
+    s_den = s_den + 2*(T_r_den(i));
+end
+denominator = s_den * (h/3);
+
+A2 = numerator/denominator;
+
+%% Exercise 2.b.)
+trap_numerator = trapz(r, T_r_num);
+trap_denominator = trapz(r, T_r_den);
+A3 = trap_numerator/trap_denominator;
