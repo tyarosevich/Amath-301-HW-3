@@ -20,7 +20,7 @@ A1(21) = (1/(2*dt)) * (3*N(21) - 4*N(20) + N(19));
 % plot(t(2:20), test(2:20), 'b')
 save A1.dat A1 -ASCII
 %% Exercise 2
-
+clear all;clc;close all;
 % As far as I can tell, THIS is the composite simpsons. It goes lockstep,
 % accounting for repeats the whole time, and in that sense is different
 % from the basic simpson's rule:
@@ -59,3 +59,38 @@ A2 = numerator/denominator;
 trap_numerator = trapz(r, T_r_num);
 trap_denominator = trapz(r, T_r_den);
 A3 = trap_numerator/trap_denominator;
+
+%% Exercise 3.a.)
+clc; clear all; close all;
+
+% This looks something like x_k+1 = x_k + h*f(x_k)
+% And dfor this problem, f(x) is the differential equation we have, h is
+% .1, x0 = x_k and x0 = 0 incrementing in h to 1, to provide us with a
+% trajectory of X values in relation to t, i.e. X(t).
+
+f = @(t,x) -2 * (x / (.25 + x)) * x + 1.5 * sin(pi*t);
+X_list = [];
+X_list(1) = 1;
+counter = 1;
+for i = 0:.1:1
+    X_list(counter+1) = X_list(counter) + .1 * f(i, (X_list(counter)));
+    counter = counter + 1;
+end
+A4 = transpose(X_list);
+
+%% Exercise 3.b.)
+
+X_list_RK = [];
+X_list_RK(1) = 1;
+counter =1;
+for i = 0:.1:1
+    X_list_RK(counter + 1) = fourth_RK(f, i, X_list_RK(counter), .1);
+    counter = counter + 1;
+end
+A5 = transpose(X_list_RK);
+
+%% Exercise 3.c.)
+
+
+
+
