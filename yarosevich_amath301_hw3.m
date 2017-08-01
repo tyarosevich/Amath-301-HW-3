@@ -21,3 +21,10 @@ A1(21) = (1/(2*dt)) * (3*N(21) - 4*N(20) + N(19));
 save A1.dat A1 -ASCII
 %% Exercise 2
 
+% As far as I can tell, THIS is the composite simpsons. It goes lockstep,
+% accounting for repeats the whole time, and in that sense is different
+% from the basic simpson's rule:
+% integ a to b f(x) dx = h/3 * (f(x_o) + ( 2* sum j = 1 to n/2-1 f(x_2*j) ) + ( 4* sum j = 1 to n/2 f(x_2*j - 1) )  + f(x_n)
+% note I dunno why it is written thsi way but the f(x_n) at the end is
+% actually f(x_last term). Also the wikipedia article includes excellent
+% python code at : https://en.wikipedia.org/wiki/Simpson%27s_rule#Composite_Simpson.27s_rule
