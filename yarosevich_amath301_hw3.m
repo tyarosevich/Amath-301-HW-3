@@ -54,11 +54,15 @@ end
 denominator = s_den * (h/3);
 
 A2 = numerator/denominator;
+save A2.dat A2 -ASCII
+
 
 %% Exercise 2.b.)
 trap_numerator = trapz(r, T_r_num);
 trap_denominator = trapz(r, T_r_den);
 A3 = trap_numerator/trap_denominator;
+
+save A3.dat A3 -ASCII
 
 %% Exercise 3.a.)
 clc; clear all; close all;
@@ -71,26 +75,115 @@ clc; clear all; close all;
 f = @(t,x) -2 * (x / (.25 + x)) * x + 1.5 * sin(pi*t);
 X_list = [];
 X_list(1) = 1;
+h = .1;
 counter = 1;
-for i = 0:.1:1
-    X_list(counter+1) = X_list(counter) + .1 * f(i, (X_list(counter)));
+for i = 0:.1:(1-h)
+    X_list(counter+1) = X_list(counter) + h * f(i, (X_list(counter)));
     counter = counter + 1;
 end
 A4 = transpose(X_list);
+save A4.dat A4 -ASCII
 
 %% Exercise 3.b.)
 
 X_list_RK = [];
 X_list_RK(1) = 1;
 counter =1;
-for i = 0:.1:1
-    X_list_RK(counter + 1) = fourth_RK(f, i, X_list_RK(counter), .1);
+for i = 0:.1:(1-h)
+    X_list_RK(counter + 1) = fourth_RK(f, i, X_list_RK(counter), h);
     counter = counter + 1;
 end
 A5 = transpose(X_list_RK);
+save A5.dat A5 -ASCII
+
 
 %% Exercise 3.c.)
 
+X_list2 = [];
+X_list2(1) = 1;
+h = .01;
+counter = 1;
+for i = 0:.01:(1-h)
+    X_list2(counter+1) = X_list2(counter) + h * f(i, (X_list2(counter)));
+    counter = counter + 1;
+end
+
+X_list_RK2 = [];
+X_list_RK2(1) = 1;
+h = .01;
+counter = 0;
+for i = 0:.01:(1-h)
+    counter = counter + 1;
+    X_list_RK2(counter + 1) = fourth_RK(f, i, X_list_RK2(counter), h);
+end
+A6 = [transpose(X_list2) transpose(X_list_RK2)];
+save A6.dat A6 -ASCII
 
 
+%% Exercise 3.d.)
+[t, Xode] = ode45(f, [0; 1], 1);
+% plot(t, Xode, 'b')
+% hold on
+% plot(0:.1:1, X_list, 'g')
+% plot(0:.1:1, X_list_RK, 'k')
+% plot(0:.01:1, X_list2, 'm')
+% plot(0:.01:1, X_list_RK2, 'y')
+A7 = [t Xode];
+save A7.dat A7 -ASCII
 
+%% Exercise 4.a.)
+clc;clear all;close all;
+A = [0 1;
+    -5/4 -3];
+save A8.dat A -ASCII
+
+%% Exercise 4.b.)
+
+dt_max = 4/5;
+save A9.dat dt_max -ASCII
+
+%% Exercise 4.c.)
+
+dt1 = .8*dt_max;
+x_t_List = zeros(2, length(0:dt1:50));
+x_t_List(:,1) = [1; 0];
+counter = 1;
+for n = dt1:dt1:50
+    x_t_List(:, (counter+1)) = forward_euler((x_t_List(:,(counter))),A,dt1);
+    counter = counter + 1;
+end
+A10 = x_t_List(1,:);
+save A10.dat A10 -ASCII
+
+% plot(0:dt1:50, x_t_List(1,:), 'g')
+% hold on
+% plot(0:dt1:50, x_t_List(2,:), 'b')
+
+%% Exercise 4.d.)
+dt1 = 1.05*dt_max;
+x_t_List2 = zeros(2, length(0:dt1:50));
+x_t_List2(:,1) = [1; 0];
+counter = 1;
+for n = dt1:dt1:50
+    x_t_List2(:, (counter+1)) = forward_euler((x_t_List2(:,(counter))),A,dt1);
+    counter = counter + 1;
+end
+A11 = x_t_List2(1,:);
+save A11.dat A11 -ASCII
+
+% plot(0:dt1:50, x_t_List2(1,:), 'g')
+% hold on
+% plot(0:dt1:50, x_t_List2(2,:), 'b')
+
+%% Exercise 4.e.)
+t = 1:50;
+y0 = [1;0];
+[t,y] = ode45(@(t,y)pend(t,y), t, y0);
+
+A12 = y(:,1);
+A13 = y(:,2);
+save A12.dat A12 -ASCII
+save A13.dat A13 -ASCII
+
+
+    
